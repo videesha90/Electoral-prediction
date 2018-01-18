@@ -1,0 +1,254 @@
+###### Reading the text data into the object
+data=read.table("C:/Users/Videesha Kothinti/Desktop/Semester 3/ML/Final Project/house-votes.txt",header=TRUE,sep=",");
+
+# Replacing the values with ? to NA
+data[data=="?"] <- NA;
+
+# Imputing the missing values
+library(gmodels);
+CrossTable(x = data$Class.Name, y = data$handicapped.infants, prop.chisq=FALSE);
+CrossTable(x = data$Class.Name, y = data$water.project.cost.sharing, prop.chisq=FALSE);
+CrossTable(x = data$Class.Name, y = data$adoption.of.the.budget.resolution, prop.chisq=FALSE);
+CrossTable(x = data$Class.Name, y = data$ physician.fee.freeze, prop.chisq=FALSE);
+CrossTable(x = data$Class.Name, y = data$el.salvador.aid, prop.chisq=FALSE);
+CrossTable(x = data$Class.Name, y = data$religious.groups.in.schools, prop.chisq=FALSE);
+CrossTable(x = data$Class.Name, y = data$anti.satellite.test.ban, prop.chisq=FALSE);
+CrossTable(x = data$Class.Name, y = data$aid.to.nicaraguan.contras, prop.chisq=FALSE);
+CrossTable(x = data$Class.Name, y = data$mx.missile, prop.chisq=FALSE);
+CrossTable(x = data$Class.Name, y = data$immigration, prop.chisq=FALSE);
+CrossTable(x = data$Class.Name, y = data$synfuels.corporation.cutback, prop.chisq=FALSE);
+CrossTable(x = data$Class.Name, y = data$education.spending, prop.chisq=FALSE);
+CrossTable(x = data$Class.Name, y = data$crime, prop.chisq=FALSE);
+CrossTable(x = data$Class.Name, y = data$duty.free.exports, prop.chisq=FALSE);
+CrossTable(x = data$Class.Name, y = data$export.administration.act.south.africa, prop.chisq=FALSE);
+CrossTable(x = data$Class.Name, y = data$superfund.right.to.sue, prop.chisq=FALSE);
+
+data$handicapped.infants[data$Class.Name=="republican" & is.na(data$handicapped.infants)] <- 'n';
+data$handicapped.infants[data$Class.Name=="democrat" & is.na(data$handicapped.infants)] <- 'y';
+
+data$water.project.cost.sharing[data$Class.Name=="republican" & is.na(data$water.project.cost.sharing)] <- 'y';
+data$water.project.cost.sharing[data$Class.Name=="democrat" & is.na(data$water.project.cost.sharing)] <- 'y';
+
+data$adoption.of.the.budget.resolution[data$Class.Name=="republican" & is.na(data$adoption.of.the.budget.resolution)] <- 'n';
+data$adoption.of.the.budget.resolution[data$Class.Name=="democrat" & is.na(data$adoption.of.the.budget.resolution)] <- 'y';
+
+data$physician.fee.freeze[data$Class.Name=="republican" & is.na(data$physician.fee.freeze)] <- 'y';
+data$physician.fee.freeze[data$Class.Name=="democrat" & is.na(data$physician.fee.freeze)] <- 'n';
+
+data$el.salvador.aid[data$Class.Name=="republican" & is.na(data$el.salvador.aid)] <- 'y';
+data$el.salvador.aid[data$Class.Name=="democrat" & is.na(data$el.salvador.aid)] <- 'n';
+
+data$religious.groups.in.schools[data$Class.Name=="republican" & is.na(data$religious.groups.in.schools)] <- 'y';
+data$religious.groups.in.schools[data$Class.Name=="democrat" & is.na(data$religious.groups.in.schools)] <- 'n';
+
+data$anti.satellite.test.ban[data$Class.Name=="republican" & is.na(data$anti.satellite.test.ban)] <- 'n';
+data$anti.satellite.test.ban[data$Class.Name=="democrat" & is.na(data$anti.satellite.test.ban)] <- 'y';
+
+data$aid.to.nicaraguan.contras[data$Class.Name=="republican" & is.na(data$aid.to.nicaraguan.contras)] <- 'n';
+data$aid.to.nicaraguan.contras[data$Class.Name=="democrat" & is.na(data$aid.to.nicaraguan.contras)] <- 'y';
+
+data$mx.missile[data$Class.Name=="republican" & is.na(data$mx.missile)] <- 'n';
+data$mx.missile[data$Class.Name=="democrat" & is.na(data$mx.missile)] <- 'y';
+
+data$immigration[data$Class.Name=="republican" & is.na(data$immigration)] <- 'y';
+data$immigration[data$Class.Name=="democrat" & is.na(data$immigration)] <- 'n';
+
+data$synfuels.corporation.cutback[data$Class.Name=="republican" & is.na(data$synfuels.corporation.cutback)] <- 'n';
+data$synfuels.corporation.cutback[data$Class.Name=="democrat" & is.na(data$synfuels.corporation.cutback)] <- 'y';
+
+data$education.spending[data$Class.Name=="republican" & is.na(data$education.spending)] <- 'y';
+data$education.spending[data$Class.Name=="democrat" & is.na(data$education.spending)] <- 'n';
+
+data$crime[data$Class.Name=="republican" & is.na(data$crime)] <- 'y';
+data$crime[data$Class.Name=="democrat" & is.na(data$crime)] <- 'n';
+
+data$duty.free.exports[data$Class.Name=="republican" & is.na(data$duty.free.exports)] <- 'n';
+data$duty.free.exports[data$Class.Name=="democrat" & is.na(data$duty.free.exports)] <- 'y';
+
+data$export.administration.act.south.africa[data$Class.Name=="republican" & is.na(data$export.administration.act.south.africa)] <- 'y';
+data$export.administration.act.south.africa[data$Class.Name=="democrat" & is.na(data$export.administration.act.south.africa)] <- 'y';
+
+data$superfund.right.to.sue[data$Class.Name=="republican" & is.na(data$superfund.right.to.sue)] <- 'y';
+data$superfund.right.to.sue[data$Class.Name=="democrat" & is.na(data$superfund.right.to.sue)] <- 'n';
+
+str(data);
+
+table(data$Class.Name);
+str(data);
+
+# Assiging the cleaned data to a temp variable named Cleaneddata
+cleaneddata <- data;
+str(cleaneddata);
+
+##################### Applying Naive Bayes Algorithm on the cleaned data
+data <- cleaneddata;
+data$Class.Name <- factor(data$Class.Name);
+str(data$Class.Name);
+set.seed(12345);
+
+data_test <- data[1:100, ];
+data_train <- data[101:435, ];
+
+summary(data_test);
+test_labels <- c(rep("democrat",62), rep("republican", 38));
+test_labels <- factor(test_labels);
+summary(data_train);
+train_labels <- c(rep("democrat",205), rep("republican", 130));
+train_labels <- factor(train_labels);
+
+install.packages("e1071");
+library(e1071);
+
+data_classifier <- naiveBayes(Class.Name~.,data=data_train);
+data_test_pred <- predict(data_classifier,data_test[,-1]);
+CrossTable(data_test_pred, data_test$Class.Name,prop.chisq = FALSE, prop.t = FALSE, dnn = c('predicted', 'actual'));
+
+accuracy <- (55+37)/(55+37+1+7);
+accuracy
+
+install.packages("caret");
+library(caret);
+confusionMatrix(data_test_pred,data_test[,1]);
+
+######################### Applying Linear SVM algorithm on the cleaned data
+data <- cleaneddata;
+str(data);
+testdata <- data[1:100, ];
+traindata <- data[101:435, ];
+summary(testdata);
+summary(traindata);
+
+install.packages("kernlab");
+library(kernlab);
+
+classifier <- ksvm(Class.Name~., data = traindata, kernel = "vanilladot");
+test_pred <- predict(classifier,testdata[,-1]);
+head(test_pred);
+table(test_pred,testdata$Class.Name);
+agreement <- test_pred == testdata$Class.Name;
+table(agreement);
+
+accuracyrate <- (60+38)/(60+38+2+0);
+accuracyrate
+
+library(caret);
+confusionMatrix(test_pred,testdata[,1]);
+
+#################### Applying 10-fold cross validation for Naive Bayes Algorithm
+data <- cleaneddata;
+str(data);
+
+folds <- createFolds(data$Class.Name, k = 10)
+str(folds);
+
+test <- data[folds$Fold01, ];
+train <- data[-folds$Fold01, 1];
+str(test);
+
+install.packages("irr");
+library(irr);
+results <- lapply(folds, function(x) {
+train <- data[-x, ]
+test <- data[x, ]
+classifier <- naiveBayes(Class.Name~.,data=train)
+pred <- predict(classifier,test[,-1])
+actual <- test$Class.Name
+kappa <- kappa2(data.frame(actual, pred))$value
+return(kappa)
+})
+
+str(results);
+mean(unlist(results));
+
+##################### Applying 10-fold for linear SVM model
+
+str(folds);
+results2 <- lapply(folds, function(x) {
+train <- data[-x, ]
+train <- data[-x, ]
+classifier <- ksvm(Class.Name~., data = train, kernel = "vanilladot")
+pred <- predict(classifier,test[,-1])
+actual <- test$Class.Name
+kappa <- kappa2(data.frame(actual, pred))$value
+return(kappa)
+})
+str(results2);
+mean(unlist(results2));
+
+
+##################### Automated parameter tuning for Naive Bayes Algorithm
+
+modelLookup("nb");
+library(caret);
+modelLookup("nb");
+data <- cleaneddata;
+str(data);
+
+m <- train(Class.Name~ ., data = data, method = "nb");
+m
+
+m$finalModel
+
+p <- predict(m, data);
+table(p,data$Class.Name);
+
+accuracy <- (255+160)/(255+160+12+8);
+accuracy
+confusionMatrix(p,data$Class.Name);
+
+###################### Auto tuning Linear SVM model
+
+modelLookup("svmLinear");
+data <- cleaneddata;
+str(data);
+model <- train(Class.Name~ ., data = data, method = "svmLinear");
+model$finalModel
+
+pred <- predict(model, data);
+table(pred,data$Class.Name);
+
+accuracyrate2 <- (263+166)/(263+166+2+4);
+accuracyrate2
+confusionMatrix(pred,data$Class.Name);
+
+######################## Applying Bagging ensemble method to improve the performance on Linear SVM algorithm
+data <- cleaneddata;
+library(kernlab);
+str(svmBag);
+svmBag$fit
+svmBag$pred
+svmBag$aggregate
+
+predfunct<-function (object, x)
+{
+if (is.character(lev(object))) {
+out <- predict(object, as.matrix(x), type = "probabilities")
+colnames(out) <- lev(object)
+rownames(out) <- NULL
+}
+else out <- predict(object, as.matrix(x))[, 1]
+out
+}
+
+bagctrl <- bagControl(fit = svmBag$fit,predict =predfunct,aggregate = svmBag$aggregate);
+set.seed(1);
+
+ctrl <- trainControl(method = "cv", number = 10);
+svmbag <- train(Class.Name~., data = data, "bag",trControl =ctrl, bagControl = bagctrl);
+svmbag
+
+########################## Applying Bagging ensemble method to improve the performance on Naive Bayes algorithm
+data <- cleaneddata;
+str(data);
+str(nbBag);
+nbBag$fit
+nbBag$pred
+nbBag$aggregate
+
+set.seed(1);
+library(e1071);
+
+ctrl <- trainControl(method = "cv", number = 10);
+nbbagctrl <- bagControl(fit = nbBag$fit,predict =nbBag$pred,aggregate = nbBag$aggregate);
+nbbag <- train(Class.Name~., data = data, "bag",trControl =ctrl, bagControl = nbbagctrl);
+nbbag
